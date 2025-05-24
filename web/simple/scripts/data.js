@@ -6,6 +6,8 @@ const KEY_TRANS = 'trans';
 const translations = [];
 const translationNames = [];
 let syncSourceIndex = -1;
+let _idCounter = 0;
+function newId(){ return _idCounter++; }
 
 
 
@@ -50,6 +52,7 @@ function syncJsonStructure(target,source){
       sync[key] = target[key]??'';
     }
   }
+  delete target;
   return sync;
 }
 

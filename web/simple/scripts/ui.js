@@ -22,16 +22,16 @@ function createSubactionButton(label){
 
 function createRadioButton(name,label){
   const wrapperDiv = document.createElement('div');
-  const radioId = `r-${Date.now()}`;
+  const radioId = `r-${newId()}`;
   const radioButton = document.createElement('input');
   radioButton.type = 'radio';
   radioButton.name = name;
   radioButton.id = radioId;
-  wrapperDiv.append(radioButton);
+  wrapperDiv.appendChild(radioButton);
   const radioLabel = document.createElement('label');
   radioLabel.htmlFor = radioId;
   radioLabel.innerText = label;
-  wrapperDiv.append(radioLabel);
+  wrapperDiv.appendChild(radioLabel);
   return wrapperDiv;
 }
 function getRadioButtonIndex(name,defaultValue){
@@ -40,6 +40,23 @@ function getRadioButtonIndex(name,defaultValue){
     if(radioButtons[i].checked) return i;
   }
   return defaultValue;
+}
+
+function createAppendButton(target){
+  const appendButton = createSubactionButton("+");
+  appendButton.style.marginTop = '-8px';
+  appendButton.onclick = ()=>{
+    const inputJsonString = prompt("Enter JSON to append: ");
+    if(inputJsonString===null||inputJsonString.length<2) return;
+    try{
+      renderJson(JSON.parse(inputJsonString), target);
+    } catch(err){
+      console.warn(err);
+      alert("Invalid JSON");
+      return;
+    }
+  };
+  return appendButton;
 }
 
 
@@ -52,6 +69,7 @@ function renderJson(obj, container) {
     wrapperDiv.className = 'trans-section';
 
     const label = document.createElement('input');
+    label.id = `t-l-${newId()}`;
     label.value = key;
     label.className = 'trans-label';
     wrapperDiv.appendChild(label);
@@ -61,8 +79,11 @@ function renderJson(obj, container) {
       nestedDiv.className = 'trans-obj';
       renderJson(value, nestedDiv);
       wrapperDiv.appendChild(nestedDiv);
+
+      wrapperDiv.appendChild(createAppendButton(nestedDiv));
     } else {
       const textarea = document.createElement('textarea');
+      textarea.id = `t-v-${newId()}`;
       textarea.value = value;
       wrapperDiv.appendChild(textarea);
       const removeButton = createSubactionButton("Remove");
@@ -86,7 +107,8 @@ function packJson(container) {
     const keyInput = section.querySelector(':scope > .trans-label');
     if (!keyInput) continue;
 
-    const key = keyInput.value || keyInput.placeholder || 'unnamed';
+    const key = keyInput.value;
+    if(!key) continue;
 
     const objContainer = section.querySelector(':scope > .trans-obj');
     const textarea = section.querySelector(':scope > textarea');
@@ -121,6 +143,7 @@ function drawTranslation(jsonData,index){
     outputDiv.id = `t-${currentId}`;
     const titleInput = document.createElement('input');
     titleInput.className = 'trans-title';
+    titleInput.id = `t-t-${currentId}`;
     titleInput.value = translationNames[currentId]??'';
     titleInput.placeholder = "Title";
     titleInput.onchange = (e)=>{
@@ -129,34 +152,40 @@ function drawTranslation(jsonData,index){
         translationNames[currentId] = title;
       }
     };
-    wrapperDiv.append(titleInput);
+    wrapperDiv.appendChild(titleInput);
     const actionsDiv = document.createElement('div');
     actionsDiv.className = 'trans-actions';
     const revertButton = createActionButton("Revert");
     revertButton.onclick = ()=>{
 
     };
-    actionsDiv.append(revertButton);
+    actionsDiv.appendChild(revertButton);
     const exportButton = createActionButton("Copy to Clipboard");
     exportButton.onclick = ()=>{
       const jsonData = packJson(outputDiv);
       exportCopyTrans(jsonData);
     };
-    actionsDiv.append(exportButton);
+    actionsDiv.appendChild(exportButton);
     const saveButton = createActionButton("Save");
     saveButton.onclick = ()=>{
       translations[currentId] = packJson(outputDiv);
       saveWork(currentId);
     };
-    actionsDiv.append(saveButton);
+    actionsDiv.appendChild(saveButton);
     const syncSourceRadio = createRadioButton(NAME_RADIO_SYNCsOURCE,"Sync source");
     //if(currentId===syncSourceIndex) syncSourceRadio.click();
-    actionsDiv.append(syncSourceRadio);
-    wrapperDiv.append(actionsDiv);
+    actionsDiv.appendChild(syncSourceRadio);
+    wrapperDiv.appendChild(actionsDiv);
 
     renderJson(jsonData, outputDiv);
-    wrapperDiv.append(outputDiv);
-    container.append(wrapperDiv);
+    wrapperDiv.appendChild(outputDiv);
+
+    const appendButton = createAppendButton(outputDiv);
+    appendButton.innerText = 'Append';
+    appendButton.style.fontSize = 'large';
+    wrapperDiv.appendChild(appendButton);
+
+    container.appendChild(wrapperDiv);
   } catch (err) {
     alert("Invalid JSON file.");
     console.error(err);
