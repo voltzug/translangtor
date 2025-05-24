@@ -2,13 +2,6 @@
  Copyright (C) 2025  volodymyr-tsukanov  translangtor
  for the full copyright notice see the LICENSE file in the root of repository
 */
-function createActionButton(label){
-  const actionButton = document.createElement('button');
-  actionButton.className = 'trans-butt';
-  actionButton.innerText = label;
-  return actionButton;
-}
-
 function loadTrans() {
   const fileInput = document.getElementById('transFile');
   const file = fileInput.files[0];

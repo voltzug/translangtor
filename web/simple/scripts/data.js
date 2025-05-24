@@ -5,6 +5,7 @@
 const KEY_TRANS = 'trans';
 const translations = [];
 const translationNames = [];
+let syncSourceIndex = -1;
 
 
 
@@ -37,54 +38,42 @@ function saveWork(translationIndex){
 
 
 
-function renderJson(obj, container) {
-  for (const key in obj) {
-    const value = obj[key];
 
-    const wrapperDiv = document.createElement('div');
-    wrapperDiv.className = 'trans-section';
+function syncJsonStructure(target,source){
+  const sync = {};
 
-    const label = document.createElement('input');
-    label.value = key;
-    label.className = 'trans-label';
-    wrapperDiv.appendChild(label);
-
-    if (typeof value === 'object' && value !== null) {
-      const nestedDiv = document.createElement('div');
-      nestedDiv.className = 'trans-obj';
-      renderJson(value, nestedDiv);
-      wrapperDiv.appendChild(nestedDiv);
+  for(const key in source){
+    if(typeof source[key]==='object' && source[key]!==null){
+      const targetValue = target[key]??source[key];
+      sync[key] = syncJsonStructure(targetValue, source[key]);
     } else {
-      const textarea = document.createElement('textarea');
-      textarea.value = value;
-      wrapperDiv.appendChild(textarea);
+      sync[key] = target[key]??'';
     }
-
-    container.appendChild(wrapperDiv);
   }
+  return sync;
 }
 
-function packJson(container) {
-  const result = {};
-
-  const sections = container.querySelectorAll(':scope > .trans-section');
-  for (const section of sections) {
-    const keyInput = section.querySelector(':scope > .trans-label');
-    if (!keyInput) continue;
-
-    const key = keyInput.value || keyInput.placeholder || 'unnamed';
-
-    const objContainer = section.querySelector(':scope > .trans-obj');
-    const textarea = section.querySelector(':scope > textarea');
-
-    if (objContainer) {
-      result[key] = packJson(objContainer);
-    } else if (textarea) {
-      result[key] = textarea.value;
-    } else {
-      result[key] = '';
-    }
+function syncWithSource(){
+  if(translations.length<2){
+    alert("Too few translations to sync");
+    return;
+  }
+  syncSourceIndex = getRadioButtonIndex(NAME_RADIO_SYNCsOURCE,-1);
+  if(syncSourceIndex===-1){
+    alert("Select sync source firstly");
+    return;
   }
 
-  return result;
+  const syncSource = translations[syncSourceIndex];
+  clearTranslations();
+  for(let index=0; index<translations.length; index++){
+    if(index===syncSourceIndex){
+      drawTranslation(syncSource,index);
+      continue;
+    }
+    const sync = syncJsonStructure(translations[index],syncSource);
+    translations[index] = sync;
+    drawTranslation(sync,index);
+  }
+  alert("Synced");
 }
