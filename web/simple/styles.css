@@ -2,3 +2,91 @@
  Copyright (C) 2025  volodymyr-tsukanov  translangtor
  for the full copyright notice see the LICENSE file in the root of repository
 */
+/* --Defaults-- */
+body {
+  margin: 0;
+  padding: 0;
+  color: white;
+  background-color: black;
+  font-family: Arial, Helvetica, sans-serif;
+}
+nav {
+  position: absolute;
+}
+textarea {
+  min-width: 25%;
+  max-width: 99%;
+}
+
+/* --Containers-- */
+.galaxy {
+  display: flex;
+  overflow-x: hidden;
+}
+.system {
+  display: flex;
+  max-width: 90%;
+  height: 100%;
+  padding: 10px;
+  gap: 15px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.planet {
+  flex: 0 1 auto;
+  max-width: 87vw;
+  padding: 20px;
+  background-color: rgb(12, 12, 12);
+  border: 1px solid blueviolet;
+  border-radius: 6px;
+  box-shadow: 2px 2px 6px black;
+}
+
+/* --Inputs-- */
+.butt-1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 70px;
+  background-color: bisque;
+}
+
+.trans-section {
+  margin-bottom: 5px;
+  padding: 2px;
+}
+.trans-label {
+  width: 90%;
+  color: antiquewhite;
+  background-color: black;
+  font-size: large;
+  font-weight: 800;
+}
+.trans-obj {
+  max-width: 90%;
+  width: fit-content;
+  margin-left: 20px;
+  padding-left: 10px;
+  border-left: 2px solid #ccc;
+  background-color: rgb(13, 13, 13);
+}
+.trans-title {
+  width: min-content;
+  color: azure;
+  background-color: rgb(10, 10, 10);
+  font-size: xx-large;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+.trans-actions {
+  display: inline-block;
+  margin-bottom: 12px;
+  gap: 6px;
+}
+.trans-butt {
+  color: orange;
+  background-color: grey;
+  font-size: x-large;
+  font-style: italic;
+  font-family: monospace;
+}

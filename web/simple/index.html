@@ -2,10 +2,27 @@
  Copyright (C) 2025  volodymyr-tsukanov  translangtor
  for the full copyright notice see the LICENSE file in the root of repository
 -->
-<!DOCTYPE html><html>
-  <head>
-    <title>TransLangTor</title>
-  </head>
-  <body>
-  </body>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>TransLangTor</title>
+  <link type="text/css" rel="stylesheet" href="styles.css" />
+  <script src="scripts/data.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/serial.js"></script>
+</head>
+
+<body>
+  <div class="galaxy">
+    <div id="container" class="system"></div>
+    <div><nav>
+      <input type="file" id="transFile" accept=".json" onchange="loadTrans()" hidden><button onclick="document.getElementById('transFile').click()">Load JSON</button>
+    </nav></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>loadWork());
+  </script>
+</body>
 </html>
