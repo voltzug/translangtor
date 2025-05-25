@@ -14,13 +14,13 @@ function loadTrans() {
     const jsonData = JSON.parse(e.target.result);
     translations.push(jsonData);
     translationNames.push(null);
-    drawTranslation(jsonData);
+    createNewTranslation(jsonData);
   };
   reader.readAsText(file);
 }
 
 function exportCopyTrans(jsonData){
-  const jsonString = JSON.stringify(jsonData, null, 2);
+  const jsonString = JSON.stringify(jsonData,null, 2);
   navigator.clipboard.writeText(jsonString).then(() => {
     alert("JSON copied!");
   }, () => {

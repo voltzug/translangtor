@@ -62,17 +62,23 @@ function createAppendButton(target){
 
 
 function renderJson(obj, container) {
+  let c = 1;
   for (const key in obj) {
     const value = obj[key];
 
     const wrapperDiv = document.createElement('div');
     wrapperDiv.className = 'trans-section';
 
-    const label = document.createElement('input');
-    label.id = `t-l-${newId()}`;
-    label.value = key;
-    label.className = 'trans-label';
-    wrapperDiv.appendChild(label);
+    const keyInput = document.createElement('input');
+    keyInput.className = 'trans-key';
+    keyInput.id = `t-l-${newId()}`;
+    keyInput.value = key;
+    const keyLabel = document.createElement('label');
+    keyLabel.className = 'trans-label';
+    keyLabel.htmlFor = keyInput.id;
+    keyLabel.innerText = c++;
+    wrapperDiv.appendChild(keyLabel);
+    wrapperDiv.appendChild(keyInput);
 
     if (typeof value === 'object' && value !== null) {
       const nestedDiv = document.createElement('div');
@@ -83,8 +89,11 @@ function renderJson(obj, container) {
       wrapperDiv.appendChild(createAppendButton(nestedDiv));
     } else {
       const textarea = document.createElement('textarea');
+      textarea.className = 'trans-value';
       textarea.id = `t-v-${newId()}`;
-      textarea.value = value;
+      if(value===null || value.length===0){
+        textarea.style.backgroundColor = 'red';
+      } else textarea.value = value;
       wrapperDiv.appendChild(textarea);
       const removeButton = createSubactionButton("Remove");
       removeButton.onclick = ()=>{
@@ -104,14 +113,14 @@ function packJson(container) {
 
   const sections = container.querySelectorAll(':scope > .trans-section');
   for (const section of sections) {
-    const keyInput = section.querySelector(':scope > .trans-label');
+    const keyInput = section.querySelector(':scope > .trans-key');
     if (!keyInput) continue;
 
-    const key = keyInput.value;
+    const key = keyInput.value.trim();
     if(!key) continue;
 
     const objContainer = section.querySelector(':scope > .trans-obj');
-    const textarea = section.querySelector(':scope > textarea');
+    const textarea = section.querySelector(':scope > .trans-value');
 
     if (objContainer) {
       result[key] = packJson(objContainer);
@@ -132,32 +141,30 @@ function clearTranslations(){
   container.innerHTML = '';
 }
 
-function drawTranslation(jsonData,index){
-  const container = document.getElementById('container');
+function drawTranslation(jsonData,index, container){
   try {
     const currentId = index??translations.length-1;
 
-    const wrapperDiv = document.createElement('div');
-    wrapperDiv.className = 'planet';
     const outputDiv = document.createElement('div');
-    outputDiv.id = `t-${currentId}`;
+    outputDiv.id = `t-c-${currentId}`;
     const titleInput = document.createElement('input');
     titleInput.className = 'trans-title';
     titleInput.id = `t-t-${currentId}`;
     titleInput.value = translationNames[currentId]??'';
     titleInput.placeholder = "Title";
     titleInput.onchange = (e)=>{
-      const title = e.target.value;
+      const title = e.target.value.trim();
       if(title.length>0){
         translationNames[currentId] = title;
       }
     };
-    wrapperDiv.appendChild(titleInput);
+    container.appendChild(titleInput);
     const actionsDiv = document.createElement('div');
     actionsDiv.className = 'trans-actions';
     const revertButton = createActionButton("Revert");
     revertButton.onclick = ()=>{
-
+      container.innerHTML = '';
+      drawTranslation(translations[currentId],currentId, container);
     };
     actionsDiv.appendChild(revertButton);
     const exportButton = createActionButton("Copy to Clipboard");
@@ -175,19 +182,26 @@ function drawTranslation(jsonData,index){
     const syncSourceRadio = createRadioButton(NAME_RADIO_SYNCsOURCE,"Sync source");
     //if(currentId===syncSourceIndex) syncSourceRadio.click();
     actionsDiv.appendChild(syncSourceRadio);
-    wrapperDiv.appendChild(actionsDiv);
+    container.appendChild(actionsDiv);
 
     renderJson(jsonData, outputDiv);
-    wrapperDiv.appendChild(outputDiv);
+    container.appendChild(outputDiv);
 
     const appendButton = createAppendButton(outputDiv);
     appendButton.innerText = 'Append';
     appendButton.style.fontSize = 'large';
-    wrapperDiv.appendChild(appendButton);
-
-    container.appendChild(wrapperDiv);
+    container.appendChild(appendButton);
   } catch (err) {
     alert("Invalid JSON file.");
     console.error(err);
   }
+}
+function createNewTranslation(jsonData){
+  const container = document.getElementById('container');
+  const currentId = translations.length-1;
+  const wrapperDiv = document.createElement('div');
+  wrapperDiv.className = 'planet';
+  wrapperDiv.id = `t-${currentId}`;
+  drawTranslation(jsonData,currentId, wrapperDiv);
+  container.appendChild(wrapperDiv);
 }

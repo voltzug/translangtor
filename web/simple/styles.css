@@ -2,6 +2,10 @@
  Copyright (C) 2025  volodymyr-tsukanov  translangtor
  for the full copyright notice see the LICENSE file in the root of repository
 */
+:root {
+  --color-black-med: rgb(12, 13, 12);
+}
+
 /* --Defaults-- */
 body {
   margin: 0;
@@ -12,6 +16,9 @@ body {
 }
 nav {
   position: absolute;
+}
+nav button {
+  width: 100%;
 }
 textarea {
   min-width: 25%;
@@ -36,7 +43,7 @@ textarea {
   flex: 0 1 auto;
   max-width: 80%;
   padding: 20px;
-  background-color: rgb(12, 12, 12);
+  background-color: var(--color-black-med);
   border: 1px solid blueviolet;
   border-radius: 6px;
   box-shadow: 2px 2px 6px black;
@@ -47,7 +54,6 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
   height: 70px;
   background-color: bisque;
 }
@@ -58,23 +64,36 @@ textarea {
   gap: 6px;
 }
 .trans-butt {
+  margin-right: 3px;
   color: orange;
   background-color: grey;
   font-size: x-large;
   font-style: italic;
   font-family: monospace;
 }
+.trans-butt:hover {
+  background-color: blanchedalmond;
+}
 
 .trans-section {
   margin-bottom: 5px;
   padding: 2px;
 }
-.trans-label {
+.trans-key {
   width: 90%;
   color: antiquewhite;
   background-color: black;
   font-size: large;
   font-weight: 800;
+}
+.trans-label {
+  padding: 1px;
+  color: aqua;
+  background-color: black;
+  border-radius: 47%;
+  font-size: small;
+  font-weight: 400;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 .trans-obj {
   max-width: 90%;
@@ -82,7 +101,7 @@ textarea {
   margin-left: 20px;
   padding-left: 10px;
   border-left: 2px solid #ccc;
-  background-color: rgb(13, 13, 13);
+  background-color: var(--color-black-med);
 }
 .trans-title {
   width: min-content;
@@ -97,4 +116,10 @@ textarea {
   background-color: black;
   font-size: medium;
   font-family: monospace;
+  transition: font-size linear 0.4s, background-color cubic-bezier(0.785, 0.135, 0.15, 0.86) 1s, color ease-in 0.8s;
+}
+.trans-subaction:hover {
+  color: black;
+  background-color: red;
+  font-size: large;
 }

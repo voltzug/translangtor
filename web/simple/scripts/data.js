@@ -15,14 +15,18 @@ function loadWork(){
   const transData = localStorage.getItem(KEY_TRANS);
   if(transData===null) return;
   const trans = JSON.parse(transData);
-  translations.length = 0;
-  translationNames.length = 0;
+  if(translations.length>0){
+    translations.forEach((value)=>{delete value});
+    console.log(translations.length);
+    translations.length = 0;
+    translationNames.length = 0;
+  }
   clearTranslations();
   for (const key in trans) {
     const value = trans[key];
     translationNames.push(key);
     translations.push(value);
-    drawTranslation(value);
+    createNewTranslation(value);
   }
 }
 
@@ -68,15 +72,16 @@ function syncWithSource(){
   }
 
   const syncSource = translations[syncSourceIndex];
-  clearTranslations();
   for(let index=0; index<translations.length; index++){
+    const targetContainer = document.getElementById(`t-${index}`);
+    targetContainer.innerHTML = '';
     if(index===syncSourceIndex){
-      drawTranslation(syncSource,index);
+      drawTranslation(syncSource,index, targetContainer);
       continue;
     }
     const sync = syncJsonStructure(translations[index],syncSource);
     translations[index] = sync;
-    drawTranslation(sync,index);
+    drawTranslation(sync,index, targetContainer);
   }
   alert("Synced");
 }
