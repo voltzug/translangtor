@@ -30,16 +30,48 @@ function loadWork(){
   }
 }
 
-function saveWork(translationIndex){
-  let transName = translationNames[translationIndex];
-  if(transName===null){
-    const inputName = prompt("Name this thanslation: ");
-    if(inputName===null) return;
-    transName = inputName;
-  }
-  const transData = JSON.parse(localStorage.getItem(KEY_TRANS)??'{}');
-  transData[transName] = translations[translationIndex];
+function saveTranslations(transData){
   localStorage.setItem(KEY_TRANS, JSON.stringify(transData));
+}
+function _clearLoadedTranslations(transData){
+  for(const key in transData){
+    if(!key in translationNames){
+      delete transData[key];
+    }
+  }
+}
+function loadSavedTranslations(){
+  const transData = JSON.parse(localStorage.getItem(KEY_TRANS)??'{}');
+  _clearLoadedTranslations(transData);
+  return transData;
+}
+function saveSingleTranslation(translationIndex,fallbackName){
+  let transName = translationNames[translationIndex];
+  if(!transName){
+    if(fallbackName){
+      transName = fallbackName;
+    } else{
+      const inputName = prompt("Name this thanslation: ");
+      if(!inputName) return;
+      transName = inputName;
+    }
+  }
+  const transData = loadSavedTranslations();
+  transData[transName] = translations[translationIndex];
+  saveTranslations(transData);
+}
+
+function saveAllWork(){
+  const transData = {};
+  translations.length = 0;
+  for(let i=0; i<translationNames.length; i++){
+    const key = translationNames[i]??`t${i}`;
+    const element = document.getElementById(`t-c-${i}`);
+    if(element===null) continue;
+    translations.push(packJson(element));
+    transData[key] = translations[i];
+  }
+  saveTranslations(transData);
 }
 
 
@@ -50,7 +82,7 @@ function syncJsonStructure(target,source){
 
   for(const key in source){
     if(typeof source[key]==='object' && source[key]!==null){
-      const targetValue = target[key]??source[key];
+      const targetValue = target[key]??'';
       sync[key] = syncJsonStructure(targetValue, source[key]);
     } else {
       sync[key] = target[key]??'';

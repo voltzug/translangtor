@@ -159,6 +159,23 @@ function drawTranslation(jsonData,index, container){
       }
     };
     container.appendChild(titleInput);
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'trans-delete';
+    deleteButton.id = `t-d-${currentId}`;
+    deleteButton.innerText = "X";
+    deleteButton.onclick = ()=>{
+      const confirmation = translationNames[currentId]??'delete';
+      const inputConfirm = prompt(`Confirm translation deletion by typing '${confirmation}': `);
+      if(inputConfirm===confirmation){
+        outputDiv.innerHTML = '';
+        container.className = '';
+        container.innerHTML = ''; //leaves junk element
+        delete translations[currentId];
+        delete translationNames[currentId];
+        saveAllWork();
+      }
+    };
+    container.appendChild(deleteButton);
     const actionsDiv = document.createElement('div');
     actionsDiv.className = 'trans-actions';
     const revertButton = createActionButton("Revert");
@@ -176,7 +193,7 @@ function drawTranslation(jsonData,index, container){
     const saveButton = createActionButton("Save");
     saveButton.onclick = ()=>{
       translations[currentId] = packJson(outputDiv);
-      saveWork(currentId);
+      saveSingleTranslation(currentId);
     };
     actionsDiv.appendChild(saveButton);
     const syncSourceRadio = createRadioButton(NAME_RADIO_SYNCsOURCE,"Sync source");

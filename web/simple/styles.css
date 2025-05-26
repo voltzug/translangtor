@@ -15,7 +15,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 nav {
-  position: absolute;
+  position: fixed;
 }
 nav button {
   width: 100%;
@@ -58,6 +58,25 @@ textarea {
   background-color: bisque;
 }
 
+.trans-title {
+  width: min-content;
+  color: azure;
+  background-color: rgb(10, 10, 10);
+  font-size: xx-large;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+.trans-delete {
+  margin-left: 9%;
+  color: beige;
+  background-color: red;
+  font-size: xx-large;
+  transition: all ease-in-out 0.4s;
+}
+.trans-delete:hover {
+  color: red;
+  background-color: whitesmoke;
+  font-size: x-large;
+}
 .trans-actions {
   display: inline-block;
   margin-bottom: 12px;
@@ -102,13 +121,6 @@ textarea {
   padding-left: 10px;
   border-left: 2px solid #ccc;
   background-color: var(--color-black-med);
-}
-.trans-title {
-  width: min-content;
-  color: azure;
-  background-color: rgb(10, 10, 10);
-  font-size: xx-large;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 .trans-subaction {
   margin: 4px;
