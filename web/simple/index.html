@@ -1,0 +1,55 @@
+<!--
+ Copyright (C) 2026  voltzug  translangtor
+ for the full copyright notice see the LICENSE file in the root of repository
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>TransLangTor</title>
+  <link type="text/css" rel="stylesheet" href="styles.css" />
+  <script src="scripts/data.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/serial.js"></script>
+</head>
+
+<body>
+  <div class="galaxy">
+    <div id="container" class="system"></div>
+    <div>
+      <nav class="toolbar">
+        <div class="toolbar-group">
+          <div class="toolbar-title">Import / Export</div>
+          <input type="file" id="transFile" accept=".json" onchange="loadTrans()" hidden>
+          <button class="butt-1" onclick="document.getElementById('transFile').click()">Import JSON</button>
+          <button class="butt-1" onclick="exportDownloadTrans(exportWorkspaceData())">Export JSON</button>
+        </div>
+        <div class="toolbar-group">
+          <div class="toolbar-title">Sync</div>
+          <button id="syncLiveButton" class="butt-1" onclick="toggleSyncLive(this)">Sync: OFF</button>
+          <button class="butt-1" onclick="syncWithSource()">Sync now</button>
+        </div>
+        <div class="toolbar-group">
+          <div class="toolbar-title">Save</div>
+          <button class="butt-1" onclick="saveAllWork()">Save All</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <div id="dialogBackdrop" class="dialog-backdrop hidden">
+    <div id="dialogShell" class="dialog-shell">
+      <div class="dialog-header">
+        <div id="dialogTitle" class="dialog-title"></div>
+        <button class="dialog-close" onclick="closeDialog()">×</button>
+      </div>
+      <div id="dialogBody" class="dialog-body"></div>
+      <div id="dialogActions" class="dialog-actions"></div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>loadWork());
+  </script>
+</body>
+</html>
