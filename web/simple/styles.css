@@ -1,9 +1,12 @@
 /*
- Copyright (C) 2025  volodymyr-tsukanov  translangtor
+ Copyright (C) 2026  voltzug  translangtor
  for the full copyright notice see the LICENSE file in the root of repository
 */
 :root {
   --color-black-med: rgb(12, 13, 12);
+  --color-modal-bg: rgba(0, 0, 0, 0.75);
+  --color-modal-panel: rgb(18, 18, 18);
+  --color-modal-border: rgb(128, 74, 190);
 }
 
 /* --Defaults-- */
@@ -16,6 +19,10 @@ body {
 }
 nav {
   position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+  width: 160px;
 }
 nav button {
   width: 100%;
@@ -23,6 +30,7 @@ nav button {
 textarea {
   min-width: 25%;
   max-width: 99%;
+  resize: vertical;
 }
 
 /* --Containers-- */
@@ -38,6 +46,7 @@ textarea {
   gap: 15px;
   overflow-y: auto;
   scroll-behavior: smooth;
+  align-items: stretch;
 }
 .planet {
   flex: 0 1 auto;
@@ -47,6 +56,8 @@ textarea {
   border: 1px solid blueviolet;
   border-radius: 6px;
   box-shadow: 2px 2px 6px black;
+  display: flex;
+  flex-direction: column;
 }
 
 /* --Inputs-- */
@@ -57,13 +68,31 @@ textarea {
   height: 70px;
   background-color: bisque;
 }
+.trans-toolbar-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.trans-sync-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-size: small;
+}
+.trans-sync-toggle input {
+  transform: scale(1.1);
+  accent-color: violet;
+}
 
 .trans-title {
   width: min-content;
   color: azure;
   background-color: rgb(10, 10, 10);
   font-size: xx-large;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 }
 .trans-delete {
   margin-left: 9%;
@@ -78,7 +107,8 @@ textarea {
   font-size: x-large;
 }
 .trans-actions {
-  display: inline-block;
+  display: flex;
+  flex-wrap: wrap;
   margin-bottom: 12px;
   gap: 6px;
 }
@@ -112,7 +142,7 @@ textarea {
   border-radius: 47%;
   font-size: small;
   font-weight: 400;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 .trans-obj {
   max-width: 90%;
@@ -122,13 +152,67 @@ textarea {
   border-left: 2px solid #ccc;
   background-color: var(--color-black-med);
 }
+.trans-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-modal-bg);
+  z-index: 1000;
+}
+.trans-modal-backdrop.open {
+  display: flex;
+}
+.trans-modal {
+  width: min(92vw, 520px);
+  background: var(--color-modal-panel);
+  border: 1px solid var(--color-modal-border);
+  border-radius: 10px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
+  padding: 16px;
+}
+.trans-modal h2 {
+  margin: 0 0 12px 0;
+}
+.trans-modal label {
+  display: block;
+  margin: 10px 0 4px;
+}
+.trans-modal input[type="text"],
+.trans-modal input[type="number"],
+.trans-modal select,
+.trans-modal textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: black;
+  color: white;
+  border: 1px solid #666;
+  border-radius: 4px;
+  padding: 8px;
+}
+.trans-modal textarea {
+  min-height: 120px;
+}
+.trans-modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+.trans-hidden-file {
+  display: none;
+}
 .trans-subaction {
   margin: 4px;
   color: red;
   background-color: black;
   font-size: medium;
   font-family: monospace;
-  transition: font-size linear 0.4s, background-color cubic-bezier(0.785, 0.135, 0.15, 0.86) 1s, color ease-in 0.8s;
+  transition:
+    font-size linear 0.4s,
+    background-color cubic-bezier(0.785, 0.135, 0.15, 0.86) 1s,
+    color ease-in 0.8s;
 }
 .trans-subaction:hover {
   color: black;
